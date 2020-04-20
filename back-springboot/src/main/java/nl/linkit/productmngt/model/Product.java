@@ -8,14 +8,13 @@ public class Product {
 
 	private long id;
 	private String name;
+	private int quantity;
 
+	public Product() {}
 
-	public Product() {
-
-	}
-
-	public Product(String name) {
+	public Product(String name, int quantity) {
 		this.name = name;
+		this.quantity = quantity;
 	}
 	
 	@Id
@@ -31,14 +30,21 @@ public class Product {
 	public String getName() {
 		return name;
 	}
-	public void setName(String firstName) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Column(name = "quantity", nullable = false)
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + "]";
+		return "User [id=" + id + ", name=" + name + ", quantity=" + quantity + "]";
 	}
 	
 }

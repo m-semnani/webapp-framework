@@ -11,6 +11,10 @@ import { UserAddComponent } from './user-add/user-add.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
+import { ProductAddComponent } from './product-add/product-add.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { ProductUpdateComponent } from './product-update/product-update.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +23,11 @@ import { UserUpdateComponent } from './user-update/user-update.component';
     UserAddComponent,
     UserDetailsComponent,
     UserListComponent,
-    UserUpdateComponent
+    UserUpdateComponent,
+    ProductAddComponent,
+    ProductDetailsComponent,
+    ProductListComponent,
+    ProductUpdateComponent
   ],
   imports: [
     BrowserModule,
