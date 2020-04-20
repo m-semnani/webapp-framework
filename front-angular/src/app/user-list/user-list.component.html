@@ -6,8 +6,9 @@
     <table class="table table-striped">
       <thead>
       <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
         <th>Email</th>
         <th>Actions</th>
       </tr>
@@ -16,6 +17,7 @@
       <tr *ngFor="let user of userList | async">
         <td>{{user.firstName}}</td>
         <td>{{user.lastName}}</td>
+        <td>{{user.username}}</td>
         <td>{{user.emailId}}</td>
         <td><button (click)="deleteUser(user.id)" class="btn btn-danger">Delete</button>
           <button (click)="updateUser(user.id)" class="btn btn-info" style="margin-left: 10px">Update</button>

@@ -7,9 +7,10 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import nl.linkit.productmngt.model.User;
+import nl.linkit.productmngt.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,21 +22,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.linkit.productmngt.exception.ResourceNotFoundException;
-import nl.linkit.productmngt.repository.UserRepository;
+import nl.linkit.productmngt.repository.AppUserRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
 	@Autowired
-	private UserRepository userRepository;
+	private AppUserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/**
 	 * List all users
 	 * @return list of users
 	 */
 	@GetMapping("/user")
-	public List<User> getAllUsers() {
+	public List<AppUser> getAllUsers() {
 		return userRepository.findAll();
 	}
 
@@ -46,9 +50,9 @@ public class UserController {
 	 * @throws ResourceNotFoundException when there is no user with provided userId
 	 */
 	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId)
+	public ResponseEntity<AppUser> getUserById(@PathVariable(value = "id") Long userId)
 			throws ResourceNotFoundException {
-		User user = userRepository.findById(userId)
+		AppUser user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 		return ResponseEntity.ok().body(user);
 	}
@@ -59,7 +63,8 @@ public class UserController {
 	 * @return created user enriched by a database id
 	 */
 	@PostMapping("/user")
-	public User createUser(@Valid @RequestBody User user) {
+	public AppUser createUser(@Valid @RequestBody AppUser user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 
@@ -71,15 +76,17 @@ public class UserController {
 	 * @throws ResourceNotFoundException when there is no user with provided userId
 	 */
 	@PutMapping("/user/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
-											   @Valid @RequestBody User userDetails) throws ResourceNotFoundException {
-		User user = userRepository.findById(userId)
+	public ResponseEntity<AppUser> updateUser(@PathVariable(value = "id") Long userId,
+											   @Valid @RequestBody AppUser userDetails) throws ResourceNotFoundException {
+		AppUser user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
 		user.setEmailId(userDetails.getEmailId());
 		user.setLastName(userDetails.getLastName());
 		user.setFirstName(userDetails.getFirstName());
-		final User updatedUser = userRepository.save(user);
+		user.setUsername(userDetails.getUsername());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		final AppUser updatedUser = userRepository.save(user);
 		return ResponseEntity.ok(updatedUser);
 	}
 
@@ -92,7 +99,7 @@ public class UserController {
 	@DeleteMapping("/user/{id}")
 	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
 			throws ResourceNotFoundException {
-		User user = userRepository.findById(userId)
+		AppUser user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
 		userRepository.delete(user);
