@@ -3,6 +3,8 @@ package nl.linkit.productmngt.controller;
 import nl.linkit.productmngt.exception.ResourceNotFoundException;
 import nl.linkit.productmngt.model.Product;
 import nl.linkit.productmngt.repository.ProductRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1")
 public class ProductController {
+
+	private static final Logger logger = LogManager.getLogger(UserController.class);
+
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -25,7 +30,10 @@ public class ProductController {
 	 */
 	@GetMapping("/product")
 	public List<Product> getAllProducts() {
-		return productRepository.findAll();
+		List<Product> products = productRepository.findAll();
+
+		logger.debug("{} Products fetched from DB.", products.size());
+		return products;
 	}
 
 	/**
@@ -39,6 +47,8 @@ public class ProductController {
 			throws ResourceNotFoundException {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
+
+		logger.debug("getProductById({}) found: {}", productId, product);
 		return ResponseEntity.ok().body(product);
 	}
 
@@ -49,7 +59,10 @@ public class ProductController {
 	 */
 	@PostMapping("/product")
 	public Product createProduct(@Valid @RequestBody Product product) {
-		return productRepository.save(product);
+		@Valid Product saved = productRepository.save(product);
+
+		logger.debug("Product created successfully: {}", saved);
+		return saved;
 	}
 
 	/**
@@ -68,6 +81,8 @@ public class ProductController {
 		product.setName(productDetails.getName());
 		product.setQuantity(productDetails.getQuantity());
 		final Product updatedProduct = productRepository.save(product);
+
+		logger.debug("Product updated successfully: {}", updatedProduct);
 		return ResponseEntity.ok(updatedProduct);
 	}
 
@@ -86,6 +101,8 @@ public class ProductController {
 		productRepository.delete(product);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
+
+		logger.debug("Product with id {} deleted successfully", productId);
 		return response;
 	}
 
@@ -95,7 +112,10 @@ public class ProductController {
 	 */
 	@GetMapping("/product/lack")
 	public List<Product> getLackProducts() {
-		return productRepository.findByQuantityLessThan(10);
+		List<Product> products = productRepository.findByQuantityLessThan(10);
+
+		logger.debug("{} Lack Products fetched from DB.", products.size());
+		return products;
 	}
 
 	/**
@@ -104,7 +124,10 @@ public class ProductController {
 	 */
 	@GetMapping("/product/excess")
 	public List<Product> getExcessProducts() {
-		return productRepository.findByQuantityGreaterThan(20);
+		List<Product> products = productRepository.findByQuantityGreaterThan(20);
+
+		logger.debug("{} Excess Products fetched from DB.", products.size());
+		return products;
 	}
 
 }

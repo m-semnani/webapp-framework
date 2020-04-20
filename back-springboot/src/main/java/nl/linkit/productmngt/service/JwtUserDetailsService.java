@@ -37,7 +37,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 throw new UsernameNotFoundException("User not found with username: " + username);
             }
 
-            log.info("loadUserByUsername() : {}", username);
+            log.debug("loadUserByUsername() : {}", username);
             return new SpringUser(user);
         }
     }

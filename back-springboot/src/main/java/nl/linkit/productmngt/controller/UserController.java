@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
-
 import nl.linkit.productmngt.model.AppUser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,9 @@ import nl.linkit.productmngt.repository.AppUserRepository;
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
+
+	private static final Logger logger = LogManager.getLogger(UserController.class);
+
 	@Autowired
 	private AppUserRepository userRepository;
 
@@ -40,7 +44,10 @@ public class UserController {
 	 */
 	@GetMapping("/user")
 	public List<AppUser> getAllUsers() {
-		return userRepository.findAll();
+		List<AppUser> users = userRepository.findAll();
+
+		logger.debug("{} Users fetched from DB.", users.size());
+		return users;
 	}
 
 	/**
@@ -52,8 +59,11 @@ public class UserController {
 	@GetMapping("/user/{id}")
 	public ResponseEntity<AppUser> getUserById(@PathVariable(value = "id") Long userId)
 			throws ResourceNotFoundException {
-		AppUser user = userRepository.findById(userId)
+		AppUser user = userRepository
+				.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+
+		logger.debug("getUserById({}) found: {}", userId, user);
 		return ResponseEntity.ok().body(user);
 	}
 
@@ -65,7 +75,10 @@ public class UserController {
 	@PostMapping("/user")
 	public AppUser createUser(@Valid @RequestBody AppUser user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+		AppUser saved = userRepository.save(user);
+
+		logger.debug("User created successfully: {}", saved);
+		return saved;
 	}
 
 	/**
@@ -87,6 +100,8 @@ public class UserController {
 		user.setUsername(userDetails.getUsername());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		final AppUser updatedUser = userRepository.save(user);
+
+		logger.debug("User updated successfully: {}", updatedUser);
 		return ResponseEntity.ok(updatedUser);
 	}
 
@@ -105,6 +120,8 @@ public class UserController {
 		userRepository.delete(user);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
+
+		logger.debug("User with id {} deleted successfully", userId);
 		return response;
 	}
 }
