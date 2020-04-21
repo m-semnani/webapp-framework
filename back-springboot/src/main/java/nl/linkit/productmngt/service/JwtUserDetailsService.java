@@ -1,13 +1,17 @@
 package nl.linkit.productmngt.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import nl.linkit.productmngt.model.AppUser;
+import nl.linkit.productmngt.model.AuthorityType;
 import nl.linkit.productmngt.model.SpringUser;
 import nl.linkit.productmngt.repository.AppUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,9 +30,10 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        if ("root".equals(username)) {
-            return new User("root", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-                    new ArrayList<>());
+        if ("admin".equals(username)) {
+            User user = new User("admin", "$2a$10$ECYjmstA15WKOGqs/mf0aujYaGGY6ZmUB4E.kSQDlObBtntJRTf7u",
+                    new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name()))));
+            return user;
 
         } else {
             AppUser user = appUserRepository.findByUsername(username);
@@ -38,7 +43,8 @@ public class JwtUserDetailsService implements UserDetailsService {
             }
 
             log.debug("loadUserByUsername() : {}", username);
-            return new SpringUser(user);
+            SpringUser springUser = new SpringUser(user);
+            return springUser;
         }
     }
 }

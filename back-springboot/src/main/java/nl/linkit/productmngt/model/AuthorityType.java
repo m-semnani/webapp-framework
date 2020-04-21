@@ -1,6 +1,6 @@
 package nl.linkit.productmngt.model;
 
 public enum AuthorityType {
-    ROLE_ADMIN,
-    ROLE_USER
+    ADMIN_ROLE,
+    USER_ROLE
 }

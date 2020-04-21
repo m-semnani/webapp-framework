@@ -98,7 +98,7 @@ public class UserController {
 		user.setLastName(userDetails.getLastName());
 		user.setFirstName(userDetails.getFirstName());
 		user.setUsername(userDetails.getUsername());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 		final AppUser updatedUser = userRepository.save(user);
 
 		logger.debug("User updated successfully: {}", updatedUser);

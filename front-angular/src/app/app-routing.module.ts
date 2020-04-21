@@ -15,7 +15,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductUpdateComponent } from './product-update/product-update.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'user', pathMatch: 'full' ,canActivate:[AuthGaurdService]},
+  { path: '', redirectTo: 'products', pathMatch: 'full' ,canActivate:[AuthGaurdService]},
   { path: 'users', component: UserListComponent ,canActivate:[AuthGaurdService]},
   { path: 'user-add', component: UserAddComponent ,canActivate:[AuthGaurdService]},
   { path: 'user-update/:id', component: UserUpdateComponent ,canActivate:[AuthGaurdService]},
