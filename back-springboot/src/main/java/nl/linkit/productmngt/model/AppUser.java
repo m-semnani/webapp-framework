@@ -1,5 +1,7 @@
 package nl.linkit.productmngt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,8 @@ public class AppUser {
 	private String emailId;
 	private String username;
 	private String password;
-	public Set<Authority> authorities = new HashSet<>();
+	private Set<Authority> authorities = new HashSet<>();
+	private Set<Product> products;
 	
 	public AppUser() {}
 	
@@ -83,6 +86,11 @@ public class AppUser {
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
 	}
+
+	@OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	public Set<Product> getProducts() { return products; }
+	public void setProducts(Set<Product> products) { this.products = products; }
 
 	@Override
 	public String toString() {

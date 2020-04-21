@@ -1,6 +1,5 @@
 package nl.linkit.productmngt.config;
 
-import nl.linkit.productmngt.model.AuthorityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

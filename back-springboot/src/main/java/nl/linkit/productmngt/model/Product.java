@@ -1,5 +1,7 @@
 package nl.linkit.productmngt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class Product {
 	private long id;
 	private String name;
 	private int quantity;
+	private AppUser appUser;
 
 	public Product() {}
 
@@ -41,6 +44,12 @@ public class Product {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	@JsonIgnore
+	public AppUser getAppUser() { return appUser; }
+	public void setAppUser(AppUser appUser) { this.appUser = appUser; }
 
 	@Override
 	public String toString() {

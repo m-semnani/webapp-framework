@@ -1,18 +1,26 @@
 package nl.linkit.productmngt.controller;
 
 import nl.linkit.productmngt.exception.ResourceNotFoundException;
+import nl.linkit.productmngt.model.AppUser;
+import nl.linkit.productmngt.model.AuthorityType;
 import nl.linkit.productmngt.model.Product;
+import nl.linkit.productmngt.repository.AppUserRepository;
 import nl.linkit.productmngt.repository.ProductRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.OperationNotSupportedException;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,13 +32,24 @@ public class ProductController {
 	@Autowired
 	private ProductRepository productRepository;
 
+	@Autowired
+	private AppUserRepository appUserRepository;
+
 	/**
 	 * List all products
 	 * @return list of products
 	 */
 	@GetMapping("/product")
 	public List<Product> getAllProducts() {
-		List<Product> products = productRepository.findAll();
+
+		List<Product> products;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name())))
+			products = productRepository.findAll();
+		else {
+			AppUser user = appUserRepository.findByUsername(authentication.getName());
+			products = productRepository.findByAppUser(user);
+		}
 
 		logger.debug("{} Products fetched from DB.", products.size());
 		return products;
@@ -48,8 +67,18 @@ public class ProductController {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
 
+		checkOwnership(product);
+
 		logger.debug("getProductById({}) found: {}", productId, product);
 		return ResponseEntity.ok().body(product);
+	}
+
+	private void checkOwnership(Product product) throws ResourceNotFoundException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name()))){
+			if(!product.getAppUser().getUsername().equalsIgnoreCase(authentication.getName()))
+				throw new ResourceNotFoundException("Access denied!");
+		}
 	}
 
 	/**
@@ -58,7 +87,14 @@ public class ProductController {
 	 * @return created product enriched by a database id
 	 */
 	@PostMapping("/product")
-	public Product createProduct(@Valid @RequestBody Product product) {
+	public Product createProduct(@Valid @RequestBody Product product) throws OperationNotSupportedException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name())))
+			throw new OperationNotSupportedException("Admin can not create a product yet ;)");
+
+		AppUser user = appUserRepository.findByUsername(authentication.getName());
+		product.setAppUser(user);
 		@Valid Product saved = productRepository.save(product);
 
 		logger.debug("Product created successfully: {}", saved);
@@ -75,8 +111,11 @@ public class ProductController {
 	@PutMapping("/product/{id}")
 	public ResponseEntity<Product> updateProduct(@PathVariable(value = "id") Long productId,
 											   @Valid @RequestBody Product productDetails) throws ResourceNotFoundException {
+
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
+
+		checkOwnership(product);
 
 		product.setName(productDetails.getName());
 		product.setQuantity(productDetails.getQuantity());
@@ -98,6 +137,8 @@ public class ProductController {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
 
+		checkOwnership(product);
+
 		productRepository.delete(product);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -112,7 +153,9 @@ public class ProductController {
 	 */
 	@GetMapping("/product/lack")
 	public List<Product> getLackProducts() {
-		List<Product> products = productRepository.findByQuantityLessThan(10);
+		List<Product> products =  getAllProducts().stream()
+				.filter(product -> product.getQuantity() < 10)
+				.collect(Collectors.toList());
 
 		logger.debug("{} Lack Products fetched from DB.", products.size());
 		return products;
@@ -124,7 +167,9 @@ public class ProductController {
 	 */
 	@GetMapping("/product/excess")
 	public List<Product> getExcessProducts() {
-		List<Product> products = productRepository.findByQuantityGreaterThan(20);
+		List<Product> products = getAllProducts().stream()
+				.filter(product -> product.getQuantity() > 20)
+				.collect(Collectors.toList());
 
 		logger.debug("{} Excess Products fetched from DB.", products.size());
 		return products;
