@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 username = ''
 password = ''
 invalidLogin = false
+errmsg = ''
 
 constructor(private router: Router,
     private loginservice: AuthenticationService) { }
@@ -27,7 +28,7 @@ constructor(private router: Router,
       },
       error => {
         this.invalidLogin = true
-
+        this.errmsg = 'username or password is wrong!'
       }
 )
 );
