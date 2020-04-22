@@ -14,6 +14,9 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductUpdateComponent } from './product-update/product-update.component';
 
+import { ConfigListComponent } from './config-list/config-list.component';
+import { ConfigUpdateComponent } from './config-update/config-update.component';
+
 const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' ,canActivate:[AuthGuardService]},
   { path: 'users', component: UserListComponent ,canActivate:[AuthGuardService]},
@@ -24,6 +27,8 @@ const routes: Routes = [
   { path: 'product-add', component: ProductAddComponent ,canActivate:[AuthGuardService]},
   { path: 'product-update/:id', component: ProductUpdateComponent ,canActivate:[AuthGuardService]},
   { path: 'product-details/:id', component: ProductDetailsComponent ,canActivate:[AuthGuardService]},
+  { path: 'configs', component: ConfigListComponent ,canActivate:[AuthGuardService]},
+  { path: 'config-update/:id', component: ConfigUpdateComponent ,canActivate:[AuthGuardService]},
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent ,canActivate:[AuthGuardService]},
 ];

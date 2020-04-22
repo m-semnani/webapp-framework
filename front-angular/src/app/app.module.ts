@@ -15,6 +15,8 @@ import { ProductAddComponent } from './product-add/product-add.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductUpdateComponent } from './product-update/product-update.component';
+import { ConfigListComponent } from './config-list/config-list.component';
+import { ConfigUpdateComponent } from './config-update/config-update.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import { ProductUpdateComponent } from './product-update/product-update.componen
     ProductAddComponent,
     ProductDetailsComponent,
     ProductListComponent,
-    ProductUpdateComponent
+    ProductUpdateComponent,
+    ConfigListComponent,
+    ConfigUpdateComponent
   ],
   imports: [
     BrowserModule,

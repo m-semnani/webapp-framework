@@ -1,0 +1,17 @@
+<h3>Update Config</h3>
+<div [hidden]="submitted" style="width: 400px;">
+  <form (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label><b>Name: </b></label>
+      <input disabled type="text" class="form-control" id="name" required [(ngModel)]="config.name" name="name">
+    </div>
+
+    <div class="form-group">
+      <label><b>Value: </b></label>
+      <input type="text" class="form-control" id="value" required [(ngModel)]="config.value" name="value">
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>

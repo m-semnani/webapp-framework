@@ -18,3 +18,7 @@ INSERT INTO linkitdb.authority (name, id) VALUES ('USER_ROLE', 2);
 -- user_authority
 INSERT INTO linkitdb.user_authority (user_id, authority_id) VALUES (1, 2);
 INSERT INTO linkitdb.user_authority (user_id, authority_id) VALUES (2, 2);
+
+-- app_config
+INSERT INTO linkitdb.app_config (id, name, value) VALUES (1, 'LACK', '10');
+INSERT INTO linkitdb.app_config (id, name, value) VALUES (2, 'EXCESS', '20');

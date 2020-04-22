@@ -1,9 +1,11 @@
 package nl.linkit.productmngt.controller;
 
 import nl.linkit.productmngt.exception.ResourceNotFoundException;
+import nl.linkit.productmngt.model.AppConfig;
 import nl.linkit.productmngt.model.AppUser;
 import nl.linkit.productmngt.model.AuthorityType;
 import nl.linkit.productmngt.model.Product;
+import nl.linkit.productmngt.repository.AppConfigRepository;
 import nl.linkit.productmngt.repository.AppUserRepository;
 import nl.linkit.productmngt.repository.ProductRepository;
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +36,9 @@ public class ProductController {
 
 	@Autowired
 	private AppUserRepository appUserRepository;
+
+	@Autowired
+	private AppConfigRepository appConfigRepository;
 
 	/**
 	 * List all products
@@ -154,7 +159,8 @@ public class ProductController {
 	@GetMapping("/product/lack")
 	public List<Product> getLackProducts() {
 		List<Product> products =  getAllProducts().stream()
-				.filter(product -> product.getQuantity() < 10)
+				.filter(product -> product.getQuantity() <
+						Integer.valueOf(appConfigRepository.findByName(AppConfig.Config.LACK.name()).getValue()))
 				.collect(Collectors.toList());
 
 		logger.debug("{} Lack Products fetched from DB.", products.size());
@@ -168,7 +174,8 @@ public class ProductController {
 	@GetMapping("/product/excess")
 	public List<Product> getExcessProducts() {
 		List<Product> products = getAllProducts().stream()
-				.filter(product -> product.getQuantity() > 20)
+				.filter(product -> product.getQuantity() >
+						Integer.valueOf(appConfigRepository.findByName(AppConfig.Config.EXCESS.name()).getValue()))
 				.collect(Collectors.toList());
 
 		logger.debug("{} Excess Products fetched from DB.", products.size());
