@@ -3,8 +3,11 @@ package nl.linkit.productmngt.controller;
 import java.util.Objects;
 
 import nl.linkit.productmngt.config.JwtTokenUtil;
+import nl.linkit.productmngt.model.AppUser;
+import nl.linkit.productmngt.model.DistilledUser;
 import nl.linkit.productmngt.model.JwtRequest;
 import nl.linkit.productmngt.model.JwtResponse;
+import nl.linkit.productmngt.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -32,6 +34,9 @@ public class JwtAuthenticationController {
 
     @Autowired
     private UserDetailsService jwtInMemoryUserDetailsService;
+
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
@@ -59,5 +64,13 @@ public class JwtAuthenticationController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+
+    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
+    public ResponseEntity<?> getAuthUser(@RequestBody JwtRequest req) {
+        if(req.getUsername().equalsIgnoreCase("admin"))
+            return ResponseEntity.ok(DistilledUser.getAdminDistilledUser());
+        return ResponseEntity.ok(DistilledUser.getDistilledUser(appUserRepository.findByUsername(req.getUsername())));
+    }
+
 }
 

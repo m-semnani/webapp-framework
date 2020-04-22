@@ -4,10 +4,10 @@
 
     <!-- Users -->
     <li class="nav-item">
-        <a *ngIf="loginService.isUserLoggedIn()"  routerLink="users" class="nav-link" routerLinkActive="active">User List</a>
+        <a *ngIf="loginService.isUserLoggedIn() && loginService.isAdmin()"  routerLink="users" class="nav-link" routerLinkActive="active">User List</a>
     </li>
     <li class="nav-item">
-        <a  *ngIf="loginService.isUserLoggedIn()" routerLink="user-add" class="nav-link" routerLinkActive="active">Add User</a>
+        <a  *ngIf="loginService.isUserLoggedIn() && loginService.isAdmin()" routerLink="user-add" class="nav-link" routerLinkActive="active">Add User</a>
     </li>
 
     <!-- Products -->

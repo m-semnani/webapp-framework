@@ -1,12 +1,11 @@
 package nl.linkit.productmngt.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import nl.linkit.productmngt.model.AppUser;
 import nl.linkit.productmngt.model.AuthorityType;
-import nl.linkit.productmngt.model.SpringUser;
 import nl.linkit.productmngt.repository.AppUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +35,18 @@ public class JwtUserDetailsService implements UserDetailsService {
             return user;
 
         } else {
-            AppUser user = appUserRepository.findByUsername(username);
+            AppUser appUser = appUserRepository.findByUsername(username);
 
-            if (user == null) {
+            if (appUser == null) {
                 throw new UsernameNotFoundException("User not found with username: " + username);
             }
 
             log.debug("loadUserByUsername() : {}", username);
-            SpringUser springUser = new SpringUser(user);
-            return springUser;
+            return new User(appUser.getUsername(), appUser.getPassword(), true, true, true, true,
+                    appUser.getAuthorities().stream()
+                            .map(authority -> new SimpleGrantedAuthority(authority.getName().toString()))
+                            .collect(Collectors.toList())
+            );
         }
     }
 }
