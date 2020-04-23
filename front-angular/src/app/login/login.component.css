@@ -1,105 +1,25 @@
-$left-color:  #242e4d;
-$right-color: #897e79;
-$green-dark:  #35c3c1;
-$green-light: #00d6b7;
-$gray:        #8f8f8f;
-$gray-light:  #f5f6f8;
-
-* {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-html, body { height: 100%; }
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-
-  background: linear-gradient(
-    135deg,
-    rgba($left-color, .9),
-    rgba($right-color, .9)
-  );
-  font-family: 'Roboto', helvetica, arial, sans-serif;
-  font-size: 1.5em;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%; width: 100%;
-
+.lf--submit {
+  display: block;
+  padding: .4em;
+  width: 100%;
+  background-color: #007bff!important;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  text-shadow: 0 1px 0 rgba(black, .2);
+  &:focus {
+    outline: none;
+    transition: transform .15s ease;
+    transform: scale(1.1);
   }
 }
 
-  .flex-row {
-    display: flex;
-    margin-bottom: 1em;
-  }
-
-  .lf--label {
-    width: 2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: $gray-light;
-    cursor: pointer;
-  }
-  .lf--input {
-    flex: 1;
-    padding: 1em;
-    color: 1px solid rgba(0,0,0,.125);
-    font-size: 1rem;
-
-    &:focus {
-      outline: none;
-      transition: transform .15s ease;
-      transform: scale(1.1);
-    }
-  }
-
-  .lf--submit {
-    display: block;
-    padding: .4em;
-    width: 100%;
-
-    background-color: #007bff!important;
-    color: white;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    text-shadow: 0 1px 0 rgba(black, .2);
-
-    &:focus {
-      outline: none;
-      transition: transform .15s ease;
-      transform: scale(1.1);
-    }
-  }
-
-.card {
-  background-color: #f5f6f8 !important;
+input.ng-invalid.ng-touched {
+  border-color: red;
 }
 
-.lf--forgot {
-  margin-top: 1em;
-  color: $green-light;
-  font-size: .65em;
-  text-align: center;
-  position: relative;
+.errMsg{
+  color: red;
+  font-size:13px;
 }
-
-.login--form {
-     margin: 10em;
-     border: 1px solid rgba(0,0,0,.125);
- }
-
- .inside {
-      margin: 1em;
-  }
-
-::placeholder { color: $gray; }
