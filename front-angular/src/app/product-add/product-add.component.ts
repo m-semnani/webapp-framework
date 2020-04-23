@@ -20,6 +20,8 @@ export class ProductAddComponent implements OnInit {
   constructor(private productService: ProductService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
+      this.product.name = 'Enter name';
+      this.product.quantity = 0;
       if(this.isAdmin) {
         console.log('hey, is admin :)')
         this.userList = this.userService.getUserList();

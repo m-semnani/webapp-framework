@@ -3,12 +3,12 @@
   <form (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" required [(ngModel)]="product.name" name="name">
+      <input type="text" value="enter the name" class="form-control" id="name" required [(ngModel)]="product.name" name="name">
     </div>
 
     <div class="form-group">
       <label for="name">Quantity</label>
-      <input type="text" pattern="[0-9]*" class="form-control" id="quantity" required [(ngModel)]="product.quantity" name="quantity">
+      <input type="number" value="1"  class="form-control" id="quantity" required [(ngModel)]="product.quantity" name="quantity">
     </div>
 
     <div class="form-group" *ngIf="isAdmin">

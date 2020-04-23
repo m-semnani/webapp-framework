@@ -23,10 +23,11 @@
 
     <div class="form-group">
       <label for="name">Password</label>
-      <input type="text" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
+      <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
     </div>
 
     <button type="submit" class="btn btn-success">Submit</button>
+    <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
   </form>
 </div>
 
