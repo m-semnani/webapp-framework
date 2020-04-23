@@ -12,6 +12,7 @@ export class ProductDetailsComponent implements OnInit {
 
   id: number;
   product: Product;
+  isAdmin:boolean = (sessionStorage.getItem('isAdmin') === 'true');
 
   constructor(private route: ActivatedRoute,private router: Router,
     private productService: ProductService) { }

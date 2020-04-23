@@ -75,6 +75,8 @@ public class ProductController {
 		checkOwnership(product);
 
 		logger.debug("getProductById({}) found: {}", productId, product);
+		product.setOwnerId(product.getAppUser().getId());
+		product.setOwnerName(product.getAppUser().getFirstName());
 		return ResponseEntity.ok().body(product);
 	}
 
@@ -94,12 +96,15 @@ public class ProductController {
 	@PostMapping("/product")
 	public Product createProduct(@Valid @RequestBody Product product) throws OperationNotSupportedException {
 
+		AppUser appUser;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name())))
-			throw new OperationNotSupportedException("Admin can not create a product yet ;)");
+		if(authentication.getAuthorities().contains(new SimpleGrantedAuthority(AuthorityType.ADMIN_ROLE.name()))){
+			appUser = appUserRepository.findById(product.getOwnerId()).get();
+		} else {
+			appUser = appUserRepository.findByUsername(authentication.getName());
+		}
 
-		AppUser user = appUserRepository.findByUsername(authentication.getName());
-		product.setAppUser(user);
+		product.setAppUser(appUser);
 		@Valid Product saved = productRepository.save(product);
 
 		logger.debug("Product created successfully: {}", saved);

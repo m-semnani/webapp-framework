@@ -11,6 +11,12 @@
       <input type="text" class="form-control" id="quantity" required [(ngModel)]="product.quantity" name="quantity">
     </div>
 
+    <div class="form-group" *ngIf="isAdmin">
+      <label for="name">Owner</label>
+      <input disabled type="text" class="form-control" id="owner" required [(ngModel)]="product.ownerName" name="owner">
+    </div>
+
     <button type="submit" class="btn btn-success">Submit</button>
+    <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
   </form>
 </div>

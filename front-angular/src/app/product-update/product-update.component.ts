@@ -12,6 +12,7 @@ export class ProductUpdateComponent implements OnInit {
   id: number;
   product: Product;
   public submitted: boolean = false;
+  isAdmin:boolean = (sessionStorage.getItem('isAdmin') === 'true');
 
   constructor(private route: ActivatedRoute,private router: Router,
     private productService: ProductService) { }

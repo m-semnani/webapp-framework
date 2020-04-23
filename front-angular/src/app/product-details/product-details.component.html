@@ -8,6 +8,12 @@
   <div>
     <label><b>Quantity: </b></label> {{product.quantity}}
   </div>
+  <div *ngIf="isAdmin">
+    <label><b>Owner Id: </b></label> {{product.ownerId}}
+  </div>
+  <div *ngIf="isAdmin">
+    <label><b>Owner: </b></label> {{product.ownerName}}
+  </div>
 </div>
 
 <br>

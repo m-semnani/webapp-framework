@@ -11,7 +11,15 @@
       <input type="text" pattern="[0-9]*" class="form-control" id="quantity" required [(ngModel)]="product.quantity" name="quantity">
     </div>
 
+    <div class="form-group" *ngIf="isAdmin">
+      <label for="name">User: &nbsp;</label>
+      <select id="ownerSelect">
+        <option *ngFor="let user of userList | async" value="{{user.id}}">{{user.firstName}}</option>
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-success">Submit</button>
+    <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
   </form>
 </div>
 

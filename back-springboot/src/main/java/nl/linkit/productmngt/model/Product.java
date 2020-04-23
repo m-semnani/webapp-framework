@@ -1,6 +1,7 @@
 package nl.linkit.productmngt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 
@@ -12,6 +13,12 @@ public class Product {
 	private String name;
 	private int quantity;
 	private AppUser appUser;
+	@Transient
+	@JsonInclude()
+	private long ownerId;
+	@Transient
+	@JsonInclude()
+	private String ownerName;
 
 	public Product() {}
 
@@ -50,6 +57,27 @@ public class Product {
 	@JsonIgnore
 	public AppUser getAppUser() { return appUser; }
 	public void setAppUser(AppUser appUser) { this.appUser = appUser; }
+
+	@Transient
+	@JsonInclude()
+	public long getOwnerId() {
+		return ownerId;
+	}
+	@Transient
+	@JsonInclude()
+	public void setOwnerId(long ownerId) {
+		this.ownerId = ownerId;
+	}
+	@Transient
+	@JsonInclude()
+	public String getOwnerName() {
+		return ownerName;
+	}
+	@Transient
+	@JsonInclude()
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
 
 	@Override
 	public String toString() {

@@ -29,8 +29,6 @@ authenticate(username, password) {
           this.getUserDistilled(username, password)
             .subscribe(
               res => {
-                  console.log(res);
-                  console.log('is_really_admin: ', res.admin)
                   sessionStorage.setItem('isAdmin', res.admin);
               }
             );
@@ -42,7 +40,6 @@ authenticate(username, password) {
 }
 
   isAdmin() {
-    console.log('hoooooi: ', sessionStorage.getItem('isAdmin'));
     let res:boolean = (sessionStorage.getItem('isAdmin') === 'true');
     return res;
   }
@@ -51,9 +48,8 @@ authenticate(username, password) {
       return this.httpClient.post<any>('http://localhost:8080/userInfo',{username,password});
   }
 
-isUserLoggedIn() {
+  isUserLoggedIn() {
     let user = sessionStorage.getItem('username')
-    console.log(!(user === null))
     return !(user === null)
   }
 

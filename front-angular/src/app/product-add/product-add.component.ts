@@ -1,6 +1,8 @@
 import { ProductService, Product } from '../service/product.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService, User } from '../service/user.service';
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-product-add',
@@ -12,11 +14,17 @@ export class ProductAddComponent implements OnInit {
 
   product: Product = new Product();
   submitted = false;
-  regex = "/^-?[0-9][^\.]*$/"
+  userList: Observable<User[]>;
+  isAdmin:boolean = (sessionStorage.getItem('isAdmin') === 'true');
 
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor(private productService: ProductService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
+      if(this.isAdmin) {
+        console.log('hey, is admin :)')
+        this.userList = this.userService.getUserList();
+        console.log(this.userList);
+      }
   }
 
   newProduct(): void {
@@ -25,6 +33,7 @@ export class ProductAddComponent implements OnInit {
   }
 
   save() {
+    this.product.ownerId  = +(<HTMLSelectElement>document.getElementById('ownerSelect')).value;
     this.productService.createProduct(this.product)
       .subscribe(data => console.log(data), error => console.log(error));
     this.product = new Product();
