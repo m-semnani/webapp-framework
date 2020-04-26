@@ -5,15 +5,17 @@ The front-end was implemented using [Angular 9](https://angular.io/) and the bac
 # Features and Technologies
 The main features includes:
 - Authentication and authorization on front end.
-- Tempelate driven forms and validattion.
+- Tempelate driven forms and validation.
 - Jwt.
 - Bootstrap.
 - Angular CLI.
 - Authentication and authorization on back end.
-- Admin full control including managing users of the application.
+- Admin full control including managing users of the application, configuration page, and managing products
 - User CRUD on products.
 - Spring Boot.
 - Jpa.
+- log4j2
+- Seed data using data.sql.
 - Mysql external database.
 - Docker compose and stand alone docker files.
 
