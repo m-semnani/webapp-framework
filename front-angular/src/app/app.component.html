@@ -6,16 +6,10 @@
     <li class="nav-item">
         <a *ngIf="loginService.isUserLoggedIn() && loginService.isAdmin()"  routerLink="users" class="nav-link" routerLinkActive="active">User List</a>
     </li>
-    <li class="nav-item">
-        <a  *ngIf="loginService.isUserLoggedIn() && loginService.isAdmin()" routerLink="user-add" class="nav-link" routerLinkActive="active">Add User</a>
-    </li>
 
     <!-- Products -->
     <li class="nav-item">
       <a *ngIf="loginService.isUserLoggedIn()"  routerLink="products" class="nav-link" routerLinkActive="active">Product List</a>
-    </li>
-    <li class="nav-item">
-      <a  *ngIf="loginService.isUserLoggedIn()" routerLink="product-add" class="nav-link" routerLinkActive="active">Add Product</a>
     </li>
 
     <!-- Configs -->

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService, Config } from '../service/config.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-config-update',
@@ -28,15 +29,15 @@ export class ConfigUpdateComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  updateConfig() {
-    this.configService.updateConfig(this.id, this.config)
-      .subscribe(data => console.log(data), error => console.log(error));
-    this.config = new Config();
-    this.gotoList();
-  }
-
-  onSubmit() {
-    this.updateConfig();
+  saveConfig(regForm: NgForm) {
+    this.configService.updateConfig(this.id, regForm.value )
+    .subscribe
+    (data => {
+      console.log(data)
+      this.gotoList();
+    },
+      error => console.log(error)
+    );
   }
 
   gotoList() {

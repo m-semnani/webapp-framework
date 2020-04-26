@@ -1,6 +1,6 @@
 <h3>Update Config</h3>
-<div [hidden]="submitted" style="width: 400px;">
-  <form (ngSubmit)="onSubmit()">
+
+<form #form="ngForm" (ngSubmit)="saveConfig(form)">
 
     <div class="form-group">
       <label><b>Name: </b></label>
@@ -13,5 +13,6 @@
     </div>
 
     <button type="submit" class="btn btn-success">Submit</button>
+    <button (click)="gotoList" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
   </form>
-</div>
+

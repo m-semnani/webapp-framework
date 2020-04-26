@@ -49,4 +49,8 @@ export class ProductListComponent implements OnInit {
   updateProduct(id: number){
     this.router.navigate(['product-update', id]);
   }
+
+  addProduct(){
+    this.router.navigate(['product-add']);
+  }
 }

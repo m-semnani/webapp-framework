@@ -40,4 +40,8 @@ export class UserListComponent implements OnInit {
   updateUser(id: number){
     this.router.navigate(['user-update', id]);
   }
+
+  addUser(){
+    this.router.navigate(['user-add']);
+  }
 }
