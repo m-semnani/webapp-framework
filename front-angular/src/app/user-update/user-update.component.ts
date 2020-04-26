@@ -13,13 +13,13 @@ export class UserUpdateComponent implements OnInit {
   id: number;
   user: User;
 
-  constructor(private route: ActivatedRoute,private router: Router,
+  constructor(private route: ActivatedRoute, private router: Router,
     private userService: UserService) { }
 
   ngOnInit() {
     this.user = new User();
     this.id = this.route.snapshot.params['id'];
-    
+
     this.userService.getUser(this.id)
       .subscribe(data => {
         console.log(data)
@@ -29,9 +29,13 @@ export class UserUpdateComponent implements OnInit {
 
   saveUser(regForm: NgForm) {
     this.userService.updateUser(this.id, regForm.value)
-      .subscribe(data => console.log(data), error => console.log(error));
-    this.user = new User();
-    this.gotoList();
+      .subscribe
+      (data => {
+        console.log(data)
+        this.gotoList();
+      },
+        error => console.log(error)
+      );
   }
 
   gotoList() {

@@ -13,7 +13,6 @@
 
     <div class="form-group">
       <label for="name">Email Address</label>
-      <!-- <input type="email" class="form-control" id="emailId" required [(ngModel)]="user.emailId" name="emailId"> -->
       <input type="email" class="form-control" id="emailId" name="emailId" email required ngModel #email="ngModel" [(ngModel)]="user.emailId">
       <span class="errMsg" *ngIf="email.touched && !email.valid ">Please enter a valid Email Address</span>
     </div>

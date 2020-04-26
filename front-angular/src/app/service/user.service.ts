@@ -37,7 +37,7 @@ export class UserService {
   }
 
   getUserList(): Observable<any> {
-    console.log('new inside user.service!!!')
+    console.log('getUserList called! so we should get new list :)')
     return this.http.get(`${this.baseUrl}`);
   }
 }
