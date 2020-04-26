@@ -1,28 +1,24 @@
 <h3>Create Product</h3>
-<div [hidden]="submitted" style="width: 400px;">
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" value="enter the name" class="form-control" id="name" required [(ngModel)]="product.name" name="name">
-    </div>
 
-    <div class="form-group">
-      <label for="name">Quantity</label>
-      <input type="number" value="1"  class="form-control" id="quantity" required [(ngModel)]="product.quantity" name="quantity">
-    </div>
+<form #form="ngForm" (ngSubmit)="saveProduct(form)">
 
-    <div class="form-group" *ngIf="isAdmin">
-      <label for="name">User: &nbsp;</label>
-      <select id="ownerSelect">
-        <option *ngFor="let user of userList | async" value="{{user.id}}">{{user.firstName}}</option>
-      </select>
-    </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name" required ngModel>
+  </div>
 
-    <button type="submit" class="btn btn-success">Submit</button>
-    <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
-  </form>
-</div>
+  <div class="form-group">
+    <label for="name">Quantity</label>
+    <input type="number" min="0" max="1000" class="form-control" name="quantity" required ngModel>
+  </div>
 
-<div [hidden]="!submitted">
-  <h4>Submitted successfully!</h4>
-</div>
+  <div class="form-group" *ngIf="isAdmin">
+    <label for="name">User: &nbsp;</label>
+    <select id="ownerSelect">
+      <option *ngFor="let user of userList | async" value="{{user.id}}">{{user.username}}</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-success" [disabled]="!form.valid">Save</button>
+  <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
+</form>

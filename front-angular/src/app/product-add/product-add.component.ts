@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService, User } from '../service/user.service';
 import { Observable } from "rxjs";
+import { NgForm, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-product-add',
@@ -12,39 +13,40 @@ import { Observable } from "rxjs";
 
 export class ProductAddComponent implements OnInit {
 
-  product: Product = new Product();
-  submitted = false;
+  ownerName: string;
   userList: Observable<User[]>;
   isAdmin:boolean = (sessionStorage.getItem('isAdmin') === 'true');
 
   constructor(private productService: ProductService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
-      this.product.name = 'Enter name';
-      this.product.quantity = 0;
       if(this.isAdmin) {
         console.log('hey, is admin :)')
         this.userList = this.userService.getUserList();
+        this.ownerName = this.userList[0].username;
         console.log(this.userList);
       }
   }
 
-  newProduct(): void {
-    this.submitted = false;
-    this.product = new Product();
+  updateOwnerName(text: string) {
+    this.ownerName = text;
   }
 
-  save() {
-    this.product.ownerId  = +(<HTMLSelectElement>document.getElementById('ownerSelect')).value;
-    this.productService.createProduct(this.product)
+  saveProduct(regForm: NgForm) {
+    let product: Product = new Product();
+    product.name = regForm.value.name;
+    product.quantity = regForm.value.quantity;
+    if(this.isAdmin) {
+      product.ownerId  = +(<HTMLSelectElement>document.getElementById('ownerSelect')).value;
+      product.ownerName  = this.ownerName;
+    } else {
+      product.ownerName = sessionStorage.getItem('username');
+    }
+
+    this.productService.createProduct(product)
       .subscribe(data => console.log(data), error => console.log(error));
-    this.product = new Product();
-    this.gotoList();
-  }
 
-  onSubmit() {
-    this.submitted = true;
-    this.save();
+    this.gotoList();
   }
 
   gotoList() {

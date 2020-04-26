@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 export class User {
-constructor(
+  constructor(
     public status: string,
   ) { }
 
@@ -19,33 +19,33 @@ export class AuthenticationService {
   ) {
   }
 
-authenticate(username, password) {
-      return this.httpClient.post<any>('http://localhost:8080/authenticate',{username,password}).pipe(
-       map(
-         userData => {
-          sessionStorage.setItem('username',username);
-          let tokenStr= 'Bearer '+ userData.token;
+  authenticate(username, password) {
+    return this.httpClient.post<any>('http://localhost:8080/authenticate', { username, password }).pipe(
+      map(
+        userData => {
+          sessionStorage.setItem('username', username);
+          let tokenStr = 'Bearer ' + userData.token;
           sessionStorage.setItem('token', tokenStr);
           this.getUserDistilled(username, password)
             .subscribe(
               res => {
-                  sessionStorage.setItem('isAdmin', res.admin);
+                sessionStorage.setItem('isAdmin', res.admin);
               }
             );
           return userData;
-         }
-)
+        }
+      )
 
-);
-}
+    );
+  }
 
   isAdmin() {
-    let res:boolean = (sessionStorage.getItem('isAdmin') === 'true');
+    let res: boolean = (sessionStorage.getItem('isAdmin') === 'true');
     return res;
   }
 
   getUserDistilled(username, password) {
-      return this.httpClient.post<any>('http://localhost:8080/userInfo',{username,password});
+    return this.httpClient.post<any>('http://localhost:8080/userInfo', { username, password });
   }
 
   isUserLoggedIn() {
