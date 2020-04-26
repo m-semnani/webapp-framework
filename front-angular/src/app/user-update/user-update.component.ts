@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService, User } from '../service/user.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-update',
@@ -11,14 +12,12 @@ export class UserUpdateComponent implements OnInit {
 
   id: number;
   user: User;
-  public submitted: boolean = false;
 
   constructor(private route: ActivatedRoute,private router: Router,
     private userService: UserService) { }
 
   ngOnInit() {
     this.user = new User();
-
     this.id = this.route.snapshot.params['id'];
     
     this.userService.getUser(this.id)
@@ -28,15 +27,11 @@ export class UserUpdateComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  updateUser() {
-    this.userService.updateUser(this.id, this.user)
+  saveUser(regForm: NgForm) {
+    this.userService.updateUser(this.id, regForm.value)
       .subscribe(data => console.log(data), error => console.log(error));
     this.user = new User();
     this.gotoList();
-  }
-
-  onSubmit() {
-    this.updateUser();    
   }
 
   gotoList() {

@@ -1,6 +1,6 @@
 <h3>Update User</h3>
-<div [hidden]="submitted" style="width: 400px;">
-  <form (ngSubmit)="onSubmit()">
+
+<form #form="ngForm" (ngSubmit)="saveUser(form)">
     <div class="form-group">
       <label for="name">First Name</label>
       <input type="text" class="form-control" id="firstName" required [(ngModel)]="user.firstName" name="firstName">
@@ -13,7 +13,9 @@
 
     <div class="form-group">
       <label for="name">Email Address</label>
-      <input type="email" class="form-control" id="emailId" required [(ngModel)]="user.emailId" name="emailId">
+      <!-- <input type="email" class="form-control" id="emailId" required [(ngModel)]="user.emailId" name="emailId"> -->
+      <input type="email" class="form-control" id="emailId" name="emailId" email required ngModel #email="ngModel" [(ngModel)]="user.emailId">
+      <span class="errMsg" *ngIf="email.touched && !email.valid ">Please enter a valid Email Address</span>
     </div>
 
     <div class="form-group">
@@ -26,7 +28,7 @@
       <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
     </div>
 
-    <button type="submit" class="btn btn-success">Submit</button>
+    <button type="submit" class="btn btn-success" [disabled]="!form.valid">Save</button>
     <button (click)="gotoList()" class="btn btn-secondary" style="margin-left: 20px;">Cancel</button><br>
   </form>
-</div>
+

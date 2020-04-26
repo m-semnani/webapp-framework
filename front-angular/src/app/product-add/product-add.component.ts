@@ -21,7 +21,6 @@ export class ProductAddComponent implements OnInit {
 
   ngOnInit() {
       if(this.isAdmin) {
-        console.log('hey, is admin :)')
         this.userList = this.userService.getUserList();
         this.ownerName = this.userList[0].username;
         console.log(this.userList);
