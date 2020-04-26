@@ -1,6 +1,7 @@
 import { UserService, User } from '../service/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-add',
@@ -10,29 +11,14 @@ import { Router } from '@angular/router';
 
 export class UserAddComponent implements OnInit {
 
-  user: User = new User();
-  submitted = false;
-
   constructor(private userService: UserService, private router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  newUser(): void {
-    this.submitted = false;
-    this.user = new User();
-  }
-
-  save() {
-    this.userService.createUser(this.user)
+  saveUser(regForm: NgForm) {
+    this.userService.createUser(regForm.value)
       .subscribe(data => console.log(data), error => console.log(error));
-    this.user = new User();
     this.gotoList();
-  }
-
-  onSubmit() {
-    this.submitted = true;
-    this.save();
   }
 
   gotoList() {

@@ -11,8 +11,6 @@ import { NgForm } from '@angular/forms';
 
 export class LoginComponent implements OnInit {
 
-  username = ''
-  password = ''
   invalidLogin = false
   errMsg = ''
 
