@@ -18,7 +18,8 @@ The main features includes:
 - Docker compose and stand alone docker files.
 
 # How to run?
-Just write `sh run.sh` and enjoy!
+Just write `sh run.sh` and enjoy! </br> 
+visit http://localhost:4200 and login with username=`admin` and password=`admin`
 
 
 This repository is still under construction ...
