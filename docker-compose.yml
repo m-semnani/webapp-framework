@@ -1,0 +1,52 @@
+version: '3' 
+services:
+  
+   sb_mysql:
+       image: mysql:5.7
+       container_name: sb_mysql
+       ports:
+           - "3306:3306"
+       command: --init-file /data/application/init.sql
+       volumes:
+           - /private/var/tmp/mysql/data:/var/lib/mysql
+           - ./init.sql:/data/application/init.sql
+       environment:
+           MYSQL_ROOT_USER: root
+           MYSQL_ROOT_PASSWORD: secret
+           MYSQL_DATABASE: linkitdb
+           MYSQL_USER: root
+           MYSQL_PASSWORD: secret
+       networks:
+         web_app_net:
+           ipv4_address: 172.28.1.13
+
+   back_springboot:
+       image: productmngt/back-springboot:latest
+       container_name: back_springboot
+       ports:
+           - "8080:8080" 
+       environment:
+           SPRING_DATASOURCE_URL: jdbc:mysql://sb_mysql:3306/linkitdb?useSSL=false
+       depends_on: 
+           - sb_mysql
+       networks:
+         web_app_net:
+           ipv4_address: 172.28.1.14
+
+   front_angular:
+       image: productmngt/front-angular:latest
+       container_name: front_angular
+       ports:
+           - "4200:4200"
+       depends_on:
+           - back_springboot
+       networks:
+         web_app_net:
+           ipv4_address: 172.28.1.15
+
+networks:
+  web_app_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
